@@ -2,13 +2,18 @@
   <div>
     <el-row type="flex" justify="center">
       <el-col :span="16">
-
+        <el-col :span="4">
+          <span class="text-logo">ミニ市場</span>
+        </el-col>
         <el-col :span="8">
           <el-menu :default-active="activeIndex" mode="horizontal" @select="handleSelect">
             <el-menu-item index="1">Home</el-menu-item>
             <el-submenu index="2">
               <template slot="title">Categories</template>
-              <el-menu-item index="2-1">Category 1</el-menu-item>
+              <el-menu-item v-for="category in item_categories" v-bind:key="category.id" :index="'2-' + category.id">
+                {{ category.name }}
+              </el-menu-item>
+              <!-- <el-menu-item index="2-1">Category 1</el-menu-item> -->
             </el-submenu>
             <el-menu-item index="3">About</el-menu-item>
           </el-menu>
@@ -17,7 +22,7 @@
         <!-- <el-col :span="10">
         </el-col> -->
 
-        <el-col :span="6" :offset="10">
+        <el-col :span="6" :offset="6">
           <user-menu/>
         </el-col>
       </el-col>
@@ -27,14 +32,19 @@
 
 <script lang="ts">
 import Vue from "vue";
+import { mapState } from "vuex";
 
 import UserMenu from "@/components/UserMenu.vue";
 
 export default Vue.extend({
   name: "MainHeader",
+  mounted () {
+    this.$store.dispatch('loadItemCategories');
+  },
   components: {
     UserMenu
   },
+  computed: mapState(['item_categories']),
   data() {
     return {
       activeIndex: "1",
@@ -47,3 +57,12 @@ export default Vue.extend({
   }
 })
 </script>
+<style scoped>
+.text-logo {
+  background-color: #c80000;
+  color: white;
+  font-size: 2.5em;
+  padding: 5px;
+  margin: 5px;
+}
+</style>

@@ -38,23 +38,25 @@ import UserMenu from "@/components/UserMenu.vue";
 
 export default Vue.extend({
   name: "MainHeader",
-  mounted () {
-    this.$store.dispatch('loadItemCategories');
-  },
   components: {
     UserMenu
   },
-  computed: mapState(['item_categories']),
   data() {
     return {
       activeIndex: "1",
     }
   },
+  computed: {
+    ...mapState(['item_categories'])
+  },
   methods: {
     handleSelect(key: string, keyPath: string) {
       console.log(key, keyPath);
     }
-  }
+  },
+  mounted () {
+    this.$store.dispatch('loadItemCategories');
+  },
 })
 </script>
 <style scoped>

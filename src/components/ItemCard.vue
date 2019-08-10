@@ -11,7 +11,12 @@ import Vue from "vue";
 
 export default Vue.extend({
   name: "ItemCard",
-  props: ['item']
+  props: {
+    item: {
+      type: Object,
+      required: true
+    }
+  }
 })
 </script>
 <style scoped>

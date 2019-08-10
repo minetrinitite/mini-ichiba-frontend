@@ -1,14 +1,43 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
 import axios from 'axios'
+import { MarketplaceService } from "@/services/marketplace.ts";
 
-Vue.use(Vuex)
+Vue.use(Vuex);
+
+const api = new MarketplaceService();
 
 export default new Vuex.Store({
   state: {
-    items: [],
+    items: [
+      {
+        name: "item1",
+        price: 455,
+      },
+      {
+        name: "item2",
+        price: 75000,
+      },
+      {
+        name: "item4 SPECIAL OFFER JUST NOW",
+        price: 999,
+      },
+    ],
     loading_items: false,
-    item_categories: []
+    item_categories: [
+      {
+        name: "Electronics",
+        id: 55,
+      },
+      {
+        name: "Forks",
+        id: 66,
+      },
+      {
+        name: "Spoons",
+        id: 77,
+      },
+    ]
   },
   mutations: {
     SET_ITEMS (state, items) {
@@ -22,23 +51,21 @@ export default new Vuex.Store({
     }
   },
   actions: {
-    loadItems ({ commit }) {
-      commit('SET_LOADING_ITEMS', true)
-      axios
-        .get('http://localhost:8089/products/all')
-        .then(r => r.data)
-        .then(items => {
-          commit('SET_ITEMS', items)
-          commit('SET_LOADING_ITEMS', false)
-        })
+    async loadItems ({ commit }) {
+      commit('SET_LOADING_ITEMS', true);
+      const items = await api.getAllProducts();
+      if (items) {
+        commit("SET_ITEMS", items);
+      }
+      commit('SET_LOADING_ITEMS', false);
     },
-    loadItemCategories ({ commit }) {
-      axios
-        .get('http://localhost:8089/categories/all')
-        .then(r => r.data)
-        .then(categories => {
-          commit('SET_ITEM_CATEGORIES', categories)
-        })
+    async loadItemCategories ({ commit }) {
+      commit('SET_LOADING_ITEMS', true);
+      const categories = await api.getAllCategories();
+      if (categories) {
+        commit("SET_ITEM_CATEGORIES", categories);
+      }
+      commit('SET_LOADING_ITEMS', false);
     }
   }
 })

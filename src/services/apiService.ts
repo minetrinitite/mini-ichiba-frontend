@@ -1,5 +1,5 @@
 import axios, { AxiosInstance } from "axios";
-import { store } from "@/store/store";
+import store from "@/store.ts";
 
 export class ApiService {
   API: AxiosInstance;

@@ -6,16 +6,16 @@
           <span class="text-logo">ミニ市場</span>
         </el-col>
         <el-col :span="8">
-          <el-menu :default-active="activeIndex" mode="horizontal" @select="handleSelect">
-            <el-menu-item index="1">Home</el-menu-item>
-            <el-submenu index="2">
+          <el-menu :default-active="activeIndex" mode="horizontal" :router="true" @select="handleSelect">
+            <el-menu-item index="/">Home</el-menu-item>
+            <el-submenu index="/">
               <template slot="title">Categories</template>
-              <el-menu-item v-for="category in item_categories" v-bind:key="category.id" :index="'2-' + category.id">
+              <el-menu-item v-for="category in item_categories" v-bind:key="category.id" index="/">
                 {{ category.name }}
               </el-menu-item>
-              <!-- <el-menu-item index="2-1">Category 1</el-menu-item> -->
             </el-submenu>
-            <el-menu-item index="3">About</el-menu-item>
+            <el-menu-item index="/about">About</el-menu-item>
+            <el-menu-item index="/signin">Sign In</el-menu-item>
           </el-menu>
         </el-col>
 

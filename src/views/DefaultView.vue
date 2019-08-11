@@ -1,6 +1,8 @@
 <template>
-  <el-row>
-    <el-col :xs="20">
+  <el-row type="flex">
+    <el-col :sm="2" class="hidden-sm-and-down">
+    </el-col>
+    <el-col :xs="24" :sm="24" :md="18">
       <div id="main">
         <el-container>
           <el-header>

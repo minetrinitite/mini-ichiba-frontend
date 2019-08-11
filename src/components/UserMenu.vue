@@ -3,7 +3,7 @@
     <el-avatar shape="circle" size="large">
       <img src="@/assets/icons8-jake.svg" alt="Jake the Dog">
     </el-avatar>
-    <h3>This is the user component</h3>
+    <span class="username">Jonathan Doe</span>
   </div>
 </template>
 
@@ -19,3 +19,9 @@ export default Vue.extend({
   }
 })
 </script>
+
+<style scoped>
+.username {
+  padding-left: 6px;
+}
+</style>

@@ -4,7 +4,7 @@ export class MarketplaceService {
   private api: ApiService;
 
   constructor(token?: string) {
-    this.api = new ApiService(token, process.env.MARKETPLACE_SERVICE);
+    this.api = new ApiService(token, process.env.VUE_APP_MARKETPLACE_SERVICE);
   }
 
   async getAllProducts() {

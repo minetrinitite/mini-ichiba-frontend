@@ -1,6 +1,6 @@
 <template>
   <el-container>
-    <el-aside width="200px" class="hidden-sm-and-down">Aside</el-aside>
+    <el-aside width="200px" class="hidden-sm-and-down"></el-aside>
     <el-main>
       <Items/>
     </el-main>

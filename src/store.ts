@@ -1,6 +1,5 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
-import axios from 'axios'
 import { MarketplaceService } from "@/services/marketplace.ts";
 
 Vue.use(Vuex);
@@ -13,14 +12,26 @@ export default new Vuex.Store({
       {
         name: "item1",
         price: 455,
+        averageRating: 4.4,
+        points: null,
       },
       {
         name: "item2",
         price: 75000,
+        averageRating: 3.7,
+        points: null,
       },
       {
         name: "item4 SPECIAL OFFER JUST NOW",
         price: 999,
+        averageRating: 4.8,
+        points: null,
+      },
+      {
+        name: "item3",
+        price: 7000,
+        averageRating: 4.0,
+        points: null,
       },
     ],
     loading_items: false,

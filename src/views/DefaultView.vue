@@ -9,7 +9,7 @@
             <main-header/>
           </el-header>
           <router-view></router-view>
-          <el-footer>
+          <el-footer height="30px" class="footer-block">
             <main-footer/>
           </el-footer>
         </el-container>
@@ -37,3 +37,10 @@ export default Vue.extend({
 
 })
 </script>
+
+<style scoped>
+.footer-block {
+  width: 100%;  
+  /* box-shadow: 0 -4px 4px -4px rgba(0, 0, 0, .12), 0 -5px 6px -5px rgba(0, 0, 0, .04); */
+}
+</style>

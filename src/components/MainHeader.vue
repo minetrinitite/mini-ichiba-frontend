@@ -25,7 +25,7 @@
           <el-menu-item disabled class="not-allowed-icon-off hidden-sm-and-down"></el-menu-item>
           <el-menu-item disabled class="not-allowed-icon-off hidden-sm-and-down"></el-menu-item>
           <el-menu-item disabled class="not-allowed-icon-off hidden-sm-and-down"></el-menu-item>
-          <el-menu-item index="4">
+          <el-menu-item>
             <user-menu/>
           </el-menu-item>
         </el-menu>

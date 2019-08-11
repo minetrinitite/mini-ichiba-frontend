@@ -1,6 +1,6 @@
 <template>
 	<div class="container" v-loading="loading_items">
-		<el-row type="flex" justify="center">
+		<el-row type="flex" class="item-row">
 			<ItemCard v-for="item in items" :key="item.id" :item="item"/>
 		</el-row>
 	</div>
@@ -27,6 +27,15 @@ export default Vue.extend({
 
 <style scoped>
 .container {
-	min-height: 500px;
+	display: flex;
+	min-height: 640px;
+	/* border: 2px solid black; */
+}
+
+.item-row {
+	display: flex;
+	flex-flow: row wrap;
+	justify-content: space-around;
+	max-height: 210px;
 }
 </style>

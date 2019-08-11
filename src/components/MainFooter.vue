@@ -1,6 +1,7 @@
 <template>
-  <div class="about">
-    <h1>This is the footer component</h1>
+  <div class="footer-main">
+    <el-divider></el-divider>
+    <span>© Ecosystem Department, 2019</span>
   </div>
 </template>
 
@@ -12,3 +13,10 @@ export default Vue.extend({
 
 })
 </script>
+
+<style scoped>
+.footer-main {
+  font-size: 13px;
+  /* box-shadow: 0 2px 4px rgba(0, 0, 0, .12), 0 0 6px rgba(0, 0, 0, .04) */
+}
+</style>

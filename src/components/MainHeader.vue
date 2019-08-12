@@ -5,15 +5,16 @@
         <span >ミニ市場</span>
       </el-col>
       <el-col :xs="20" :sm="20">  
-        <el-menu :default-active="activeIndex" mode="horizontal" class="menu-flex" @select="handleSelect">
-          <el-menu-item index="1">Home</el-menu-item>
-          <el-submenu index="2">
+        <el-menu :default-active="activeIndex" :router="true" mode="horizontal" class="menu-flex" @select="handleSelect">
+          <el-menu-item index="/">Home</el-menu-item>
+          <el-submenu index="/">
             <template slot="title">Categories</template>
             <el-menu-item v-for="category in item_categories" :key="category.id" :index="'2-' + category.id">
               {{ category.name }}
             </el-menu-item>
           </el-submenu>
-          <el-menu-item index="3">About</el-menu-item>
+          <el-menu-item index="/cart">Cart</el-menu-item>
+          <el-menu-item index="/about">About</el-menu-item>
           <el-menu-item disabled class="not-allowed-icon-off hidden-sm-and-down"></el-menu-item>
           <el-menu-item disabled class="not-allowed-icon-off hidden-sm-and-down"></el-menu-item>
           <el-menu-item disabled class="not-allowed-icon-off hidden-sm-and-down"></el-menu-item>

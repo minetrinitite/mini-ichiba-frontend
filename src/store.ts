@@ -1,6 +1,7 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
 import { MarketplaceService } from "@/services/marketplace.ts";
+import { CartItem, Cart } from "@/cart.ts";
 
 Vue.use(Vuex);
 
@@ -8,6 +9,7 @@ const api = new MarketplaceService();
 
 export default new Vuex.Store({
   state: {
+    cart: new Cart(),
     items: [
       {
         name: "item1",
@@ -50,6 +52,9 @@ export default new Vuex.Store({
       },
     ]
   },
+  getters: {
+    getCartTotal: state => state.cart.getTotalCost(),
+  },
   mutations: {
     SET_ITEMS (state, items) {
       state.items = items
@@ -59,6 +64,9 @@ export default new Vuex.Store({
     },
     SET_ITEM_CATEGORIES (state, item_categories) {
       state.item_categories = item_categories;
+    },
+    ADD_TO_CART (state, item: CartItem) {
+      state.cart.addItem(item);
     }
   },
   actions: {
@@ -77,6 +85,9 @@ export default new Vuex.Store({
         commit("SET_ITEM_CATEGORIES", categories);
       }
       commit('SET_LOADING_ITEMS', false);
+    },
+    addToCart ({ commit }, item: CartItem) {
+      commit('ADD_TO_CART', item);
     }
   }
 })

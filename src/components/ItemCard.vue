@@ -38,6 +38,11 @@ export default Vue.extend({
   },
   created() {
     this.item ? this.item.points=( Math.floor(this.item.price as number / 50) ) : null;
+  },
+  methods: {
+    addToCart() {
+      this.$store.dispatch('addToCart', { ...this.item, amount: 1});
+    }
   }
 })
 </script>

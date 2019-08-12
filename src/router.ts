@@ -19,6 +19,11 @@ export default new Router({
           component: () => import("./views/Home.vue"),
         },
         {
+          path: '/cart',
+          name: 'Cart',
+          component: () => import ("./views/Cart.vue"),
+        },
+        {
           path: '/signin',
           name: 'Sign In',
           component: () => import("./views/SignIn.vue"),

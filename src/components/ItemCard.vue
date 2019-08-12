@@ -22,6 +22,7 @@
           {{ item.points }} pts.
         </div>
       </div>
+      <el-button class="item-card__cart-button" type="primary" size="mini" @click="addToCart">Add to Cart</el-button>
     </el-card>
 </template>
 
@@ -57,7 +58,7 @@ a {
   margin: 4px;
   justify-content: center;
   width: 200px;
-  height: 270px;
+  height: 310px;
 }
 
 .image-block {
@@ -104,5 +105,10 @@ a {
   font-weight: 600;
   color:  #888888;
   width: 45%;
+}
+
+.item-card__cart-button {
+  width: 75%;
+  margin: 10px;
 }
 </style>

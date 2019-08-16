@@ -20,6 +20,7 @@ export class ApiService {
       return response
     }, (error) => {
       store.commit('SET_LOADING_ITEMS', false);
+      store.commit('SET_LOADING_ORDERS', false);
       console.log(error);
     });
   }

@@ -20,4 +20,19 @@ export class MarketplaceService {
       return response.data
     }
   }
+
+  async getAllOrders(id: string) {
+    // TODO: bet there is a better way to send request parameters
+    const response = await this.api.API.get('/orders/all?customerId=' + id);
+    if (response) {
+      return response.data;
+    }
+  }
+
+  async postOrder(order: object) {
+    const response = await this.api.API.post('/orders/create', order);
+    if (response) {
+      return response.status;
+    }
+  }
 }

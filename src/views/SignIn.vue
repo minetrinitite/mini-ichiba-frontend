@@ -13,60 +13,92 @@
                     </el-form-item>
                     <el-form-item>
                         <div class="login-link"><el-link href="/password-recovery" type="primary">Forgot your password?</el-link></div>
-                        <div class="login-link"><el-link href="/signup" type="primary"> Sign Up</el-link></div>
+                        <div class="login-link"><el-link @click="signUp" type="primary"> Sign Up</el-link></div>
                     </el-form-item>
                     <el-form-item>    
-                        <el-button type="primary" @click="onSubmit('form')" class="login-button">Sign In</el-button>
+                        <el-button type="primary" @click="submitForm('form')" class="login-button">Sign In</el-button>
                     </el-form-item>
                 </el-form>
             </el-card>
         </el-main>
     </el-container>
 </template>
+
 <script>
+
+import { LoginService } from "@/services/loginService";
+
 export default {
-    data() {
-        // TODO: extra checks
-        var checkUsername = (rule, value, callback) => {
-            if (value === "") {
-                callback(new Error("Please input the username."));
-            } else {
-                callback();
-            }
-        };
+  data() {
+      // TODO: extra checks
+      var checkUsername = (rule, value, callback) => {
+          if (value === "") {
+              callback(new Error("Please input the username."));
+          } else {
+              callback();
+          }
+      };
 
-        var checkPassword = (rule, value, callback) => {
-            if (value === "") {
-                callback(new Error("Please input the password."));
-            } else {
-                callback();
-            }
-        };
+      var checkPassword = (rule, value, callback) => {
+          if (value === "") {
+              callback(new Error("Please input the password."));
+          } else {
+              callback();
+          }
+      };
 
-        return {
-            form: {
-                username: "",
-                password: ""
-            },
-            rules: {
-                username: [{ validator: checkUsername, trigger: 'blur'}],
-                password: [{ validator: checkPassword, trigger: 'blur'}]
-            }
-        };
-    },
-    methods: {
-        onSubmit(formName) {
-            this.$refs[formName].validate((valid) => {
-                if (valid) {
-                    // TODO: submit auth request to the Membership service
-                    alert('submitted');
-                } else {
-                    console.log("failed to submit.");
-                    return false;
-                }
-            });
+      return {
+          loginApi: new LoginService(),
+          form: {
+              username: "",
+              password: ""
+          },
+          rules: {
+              username: [{ validator: checkUsername, trigger: 'blur'}],
+              password: [{ validator: checkPassword, trigger: 'blur'}]
+          }
+      };
+  },
+  methods: {
+    submitForm(formName) {
+      this.$refs[formName].validate(async (valid) => {
+        if (valid) {
+          const tokens = await this.$store.dispatch("login", this.form);
+          this.proceedAfterLogin();
+          // TODO: submit auth request to the Membership service
+          alert('submitted');
+        } else {
+          console.log("failed to submit.");
+          return false;
         }
+      });
+    },
+
+    signUp() {
+      this.$refs.form.validate(async (valid) => {
+        if (valid) {
+          const data = await this.loginApi.createNewUser(this.form.username, this.form.password);
+          if (data) {
+            const tokens = {
+              accessToken: data["access token"],
+              refreshToken: data["refresh token"]
+            }
+            this.$store.commit("SET_CREDENTIALS", tokens);
+            this.proceedAfterLogin();
+          }
+          else {
+            console.log("Could not create user.")
+          }
+        }
+      })  
+    },
+
+    proceedAfterLogin() {
+      if (this.$store.user.loggedIn) {
+        this.$router.push("Home");
+      }
     }
+  }
 }
 </script>
 <style scoped>
@@ -96,4 +128,9 @@ h1 {
     font-size: 25px;
     line-height: 30px;
 }
+
+/* .back-icon {
+    text-align: left !important;
+    align-self: left;
+} */
 </style>

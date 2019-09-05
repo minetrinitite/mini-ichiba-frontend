@@ -6,7 +6,7 @@
         <img src="@/assets/icons8-jake.svg" alt="Jake the Dog">
       </el-avatar>
       <span class="username">
-        Jonathan Doe<i class="el-icon-arrow-down el-icon--right"></i>
+        {{ username }}<i class="el-icon-arrow-down el-icon--right"></i>
       </span>
     </div>
     <el-dropdown-menu slot="dropdown">
@@ -20,17 +20,25 @@
   
 </template>
 
-<script lang="ts">
-import Vue from "vue";
-
-export default Vue.extend({
+<script>
+export default {
   name: "UserMenu",
   data() {
     return {
 
     }
+  },
+  computed: {
+    username: function() {
+      if (this.$store.state.user.loggedIn) {
+        return this.$store.state.user.userInfo.username
+      }
+      else {
+        return "Jonathan Doe"
+      }
+    }
   }
-})
+}
 </script>
 
 <style scoped>

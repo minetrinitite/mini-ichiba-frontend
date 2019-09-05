@@ -2,14 +2,30 @@ import Vue from 'vue'
 import Vuex from 'vuex'
 import { MarketplaceService } from "@/services/marketplace.ts";
 import { CartItem, Cart } from "@/cart.ts";
+import { LoginService } from "@/services/loginService";
+import { PointsService } from "@/services/pointsService";
 
 Vue.use(Vuex);
 
-const api = new MarketplaceService();
+const marketplaceApi = new MarketplaceService();
+const loginApi = new LoginService();
+const pointsApi = new PointsService();
 
 export default new Vuex.Store({
   state: {
     cart: new Cart(),
+    user: {
+      userInfo: {
+        username: "",
+        userId: ""
+      },
+      loggedIn: false,
+      accessToken: null,
+      refreshToken: null,
+      points: {
+      },
+      transactions: []
+    },
     items: [
       {
         name: "item1",
@@ -83,12 +99,19 @@ export default new Vuex.Store({
     },
     SET_LOADING_ORDERS(state, value) {
       state.loading_orders = value;
+    },
+    SET_CREDENTIALS (state, tokens) {
+      state.user.accessToken = tokens.accessToken ? tokens.accessToken : null;
+      state.user.refreshToken = tokens.refreshToken ? tokens.refreshToken : null
+      if (state.user.refreshToken && state.user.accessToken) {
+        state.user.loggedIn = true;
+      }
     }
   },
   actions: {
     async loadItems ({ commit }) {
       commit('SET_LOADING_ITEMS', true);
-      const items = await api.getAllProducts();
+      const items = await marketplaceApi.getAllProducts();
       if (items) {
         commit("SET_ITEMS", items);
       }
@@ -97,7 +120,7 @@ export default new Vuex.Store({
     
     async loadItemCategories ({ commit }) {
       commit('SET_LOADING_ITEMS', true);
-      const categories = await api.getAllCategories();
+      const categories = await marketplaceApi.getAllCategories();
       if (categories) {
         commit("SET_ITEM_CATEGORIES", categories);
       }
@@ -113,7 +136,7 @@ export default new Vuex.Store({
     },
     
     async sendOrder (state, order: object) {
-      const result = await api.postOrder(order);
+      const result = await marketplaceApi.postOrder(order);
       if (result)
         return result;
     },
@@ -124,11 +147,36 @@ export default new Vuex.Store({
 
     async loadOrders ({ commit }, id) {
       commit('SET_LOADING_ORDERS', true);
-      const orders = await api.getAllOrders(id);
+      const orders = await marketplaceApi.getAllOrders(id);
       if (orders) {
         commit("SET_ORDERS", orders);
       }
       commit("SET_LOADING_ORDERS", false);
+    },
+
+    async login({ commit }, params) {
+      commit('SET_LOADING_ITEMS', true);
+      const data = await loginApi.login(params.username, params.password);
+      if (data) {
+        const tokens = {
+          accessToken: data["access token"],
+          refreshToken: data["refresh token"]
+        }
+        commit("SET_CREDENTIALS", tokens);
+        commit('SET_LOADING_ITEMS', false);
+        return tokens
+      }
+      commit('SET_LOADING_ITEMS', false);
+      return 0
+    },
+
+    async payWithPoints({ commit }, params) {
+      commit('SET_LOADING_ITEMS', true);
+      const currentUser = "";
+      const pointsTransaction = await pointsApi.startPointsTransaction(currentUser, - params.checkoutTotal);
+      const data = await pointsApi.endPointsTransaction(pointsTransaction.transactionId);
+      commit('SET_LOADING_ITEMS', false);
+      return 0
     }
   }
 })

@@ -22,6 +22,7 @@
           {{ item.points }} pts.
         </div>
       </div>
+      <el-button class="item-card__cart-button" type="primary" size="mini" @click="addToCart">Add to Cart</el-button>
     </el-card>
 </template>
 
@@ -38,6 +39,11 @@ export default Vue.extend({
   },
   created() {
     this.item ? this.item.points=( Math.floor(this.item.price as number / 50) ) : null;
+  },
+  methods: {
+    addToCart() {
+      this.$store.dispatch('addToCart', { ...this.item, amount: 1});
+    }
   }
 })
 </script>
@@ -52,7 +58,7 @@ a {
   margin: 4px;
   justify-content: center;
   width: 200px;
-  height: 270px;
+  height: 310px;
 }
 
 .image-block {
@@ -99,5 +105,10 @@ a {
   font-weight: 600;
   color:  #888888;
   width: 45%;
+}
+
+.item-card__cart-button {
+  width: 75%;
+  margin: 10px;
 }
 </style>

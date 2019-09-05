@@ -2,11 +2,13 @@ import Vue from 'vue'
 import Vuex from 'vuex'
 import { MarketplaceService } from "@/services/marketplace.ts";
 import { LoginService } from "@/services/loginService";
+import { PointsService } from "@/services/pointsService";
 
 Vue.use(Vuex);
 
 const marketplaceApi = new MarketplaceService();
 const loginApi = new LoginService();
+const pointsApi = new PointsService();
 
 export default new Vuex.Store({
   state: {
@@ -16,7 +18,10 @@ export default new Vuex.Store({
       },
       loggedIn: false,
       accessToken: null,
-      refreshToken: null
+      refreshToken: null,
+      points: {
+      },
+      transactions: []
     },
     items: [
       {
@@ -109,6 +114,15 @@ export default new Vuex.Store({
         commit('SET_LOADING_ITEMS', false);
         return tokens
       }
+      commit('SET_LOADING_ITEMS', false);
+      return 0
+    },
+
+    async payWithPoints({ commit }, params) {
+      commit('SET_LOADING_ITEMS', true);
+      const currentUser = "";
+      const pointsTransaction = await pointsApi.startPointsTransaction(currentUser, - params.checkoutTotal);
+      const data = await pointsApi.endPointsTransaction(pointsTransaction.transactionId);
       commit('SET_LOADING_ITEMS', false);
       return 0
     }

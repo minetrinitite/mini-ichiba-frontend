@@ -1,13 +1,23 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
 import { MarketplaceService } from "@/services/marketplace.ts";
+import { LoginService } from "@/services/loginService";
 
 Vue.use(Vuex);
 
-const api = new MarketplaceService();
+const marketplaceApi = new MarketplaceService();
+const loginApi = new LoginService();
 
 export default new Vuex.Store({
   state: {
+    user: {
+      userInfo: {
+        username: "",
+      },
+      loggedIn: false,
+      accessToken: null,
+      refreshToken: null
+    },
     items: [
       {
         name: "item1",
@@ -59,24 +69,48 @@ export default new Vuex.Store({
     },
     SET_ITEM_CATEGORIES (state, item_categories) {
       state.item_categories = item_categories;
+    },
+    SET_CREDENTIALS (state, tokens) {
+      state.user.accessToken = tokens.accessToken ? tokens.accessToken : null;
+      state.user.refreshToken = tokens.refreshToken ? tokens.refreshToken : null
+      if (state.user.refreshToken && state.user.accessToken) {
+        state.user.loggedIn = true;
+      }
     }
   },
   actions: {
     async loadItems ({ commit }) {
       commit('SET_LOADING_ITEMS', true);
-      const items = await api.getAllProducts();
+      const items = await marketplaceApi.getAllProducts();
       if (items) {
         commit("SET_ITEMS", items);
       }
       commit('SET_LOADING_ITEMS', false);
     },
+
     async loadItemCategories ({ commit }) {
       commit('SET_LOADING_ITEMS', true);
-      const categories = await api.getAllCategories();
+      const categories = await marketplaceApi.getAllCategories();
       if (categories) {
         commit("SET_ITEM_CATEGORIES", categories);
       }
       commit('SET_LOADING_ITEMS', false);
+    },
+
+    async login({ commit }, params) {
+      commit('SET_LOADING_ITEMS', true);
+      const data = await loginApi.login(params.username, params.password);
+      if (data) {
+        const tokens = {
+          accessToken: data["access token"],
+          refreshToken: data["refresh token"]
+        }
+        commit("SET_CREDENTIALS", tokens);
+        commit('SET_LOADING_ITEMS', false);
+        return tokens
+      }
+      commit('SET_LOADING_ITEMS', false);
+      return 0
     }
   }
 })

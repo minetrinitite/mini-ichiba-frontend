@@ -5,7 +5,7 @@ export class LoginService {
   private api: ApiService;
 
   constructor(token?: string) {
-    this.api = new ApiService(token, process.env.VUE_APP_MARKETPLACE_SERVICE);
+    this.api = new ApiService(token, process.env.VUE_APP_LOGIN_SERVICE);
   }
 
   async createNewUser(username: string, password: string) {

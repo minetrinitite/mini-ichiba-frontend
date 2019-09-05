@@ -15,6 +15,7 @@ export default new Vuex.Store({
     user: {
       userInfo: {
         username: "",
+        userId: ""
       },
       loggedIn: false,
       accessToken: null,

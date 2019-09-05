@@ -13,19 +13,8 @@
               {{ category.name }}
             </el-menu-item>
           </el-submenu>
-          <el-menu-item index="/cart">Cart</el-menu-item>
+          <el-menu-item index="/cart">Cart <el-badge v-if="cartItems !== 0" class="cart-amount-block" :value="cartItems" /></el-menu-item>
           <el-menu-item index="/about">About</el-menu-item>
-          <el-menu-item disabled class="not-allowed-icon-off hidden-sm-and-down"></el-menu-item>
-          <el-menu-item disabled class="not-allowed-icon-off hidden-sm-and-down"></el-menu-item>
-          <el-menu-item disabled class="not-allowed-icon-off hidden-sm-and-down"></el-menu-item>
-          <el-menu-item disabled class="not-allowed-icon-off hidden-sm-and-down"></el-menu-item>
-          <el-menu-item disabled class="not-allowed-icon-off hidden-sm-and-down"></el-menu-item>
-          <el-menu-item disabled class="not-allowed-icon-off hidden-sm-and-down"></el-menu-item>
-          <el-menu-item disabled class="not-allowed-icon-off hidden-sm-and-down"></el-menu-item>
-          <el-menu-item disabled class="not-allowed-icon-off hidden-sm-and-down"></el-menu-item>
-          <el-menu-item disabled class="not-allowed-icon-off hidden-sm-and-down"></el-menu-item>
-          <el-menu-item disabled class="not-allowed-icon-off hidden-sm-and-down"></el-menu-item>
-          <el-menu-item disabled class="not-allowed-icon-off hidden-sm-and-down"></el-menu-item>
           <el-menu-item>
             <user-menu/>
           </el-menu-item>
@@ -52,7 +41,11 @@ export default Vue.extend({
     }
   },
   computed: {
-    ...mapState(['item_categories'])
+    ...mapState(['item_categories']),
+
+    cartItems: function() {
+      return this.$store.state.cart.getItemCount();
+    }
   },
   methods: {
     handleSelect(key: string, keyPath: string) {
@@ -85,5 +78,13 @@ export default Vue.extend({
 .menu-flex {
   display: flex;
   font-weight: 600;
+}
+
+.cart-amount-block {
+  margin: 0 0 4px 0;
+}
+
+li:last-child {
+  margin-left: auto;
 }
 </style>

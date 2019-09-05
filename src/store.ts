@@ -28,24 +28,28 @@ export default new Vuex.Store({
     },
     items: [
       {
+        id: 1,
         name: "item1",
         price: 455,
         averageRating: 4.4,
         points: null,
       },
       {
+        id: 2,
         name: "item2",
         price: 75000,
         averageRating: 3.7,
         points: null,
       },
       {
+        id: 3,
         name: "item4 SPECIAL OFFER JUST NOW",
         price: 999,
         averageRating: 4.8,
         points: null,
       },
       {
+        id: 4,
         name: "item3",
         price: 7000,
         averageRating: 4.0,

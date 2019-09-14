@@ -1,22 +1,20 @@
 <template>
     <el-container>
-        <!--<el-aside width="200px">Aside</el-aside>-->
-        <el-main>
+        <el-main v-loading="awaiting">
             <el-card class="box">
+                <h1>Sign Up</h1>
                 <el-form ref="form" :model="form" :rules="rules" label-position="left">
-                    <h1>Sign In</h1>
+                    <el-form-item label="Username" prop="name">
+                        <el-input v-model="form.name" placeholder="Username"/>
+                    </el-form-item>
                     <el-form-item label="Email" prop="email">
                         <el-input v-model="form.email" placeholder="Email"/>
                     </el-form-item>
                     <el-form-item label="Password" prop="password">
                         <el-input type="password" v-model="form.password" placeholder="Password" autocomplete="false"/>
                     </el-form-item>
-                    <el-form-item>
-                        <div class="login-link"><el-link href="/password-recovery" type="primary">Forgot your password?</el-link></div>
-                        <div class="login-link"><el-link href="/signup" type="primary">Sign Up</el-link></div>
-                    </el-form-item>
                     <el-form-item>    
-                        <el-button type="primary" @click="submitForm('form')" class="login-button">Sign In</el-button>
+                        <el-button type="primary" @click="submitForm('form')" class="login-button">Sign Up</el-button>
                     </el-form-item>
                 </el-form>
             </el-card>
@@ -31,9 +29,17 @@ import { LoginService } from "@/services/loginService";
 export default {
   data() {
       // TODO: extra checks
+      var checkName = (rule, value, callback) => {
+          if (value === "") {
+              callback(new Error("Please input the username."));
+          } else {
+              callback();
+          }
+      };
+
       var checkEmail = (rule, value, callback) => {
           if (value === "") {
-              callback(new Error("Please input the email."));
+              callback(new Error("Please input the username."));
           } else {
               callback();
           }
@@ -50,12 +56,15 @@ export default {
       return {
           loginApi: new LoginService(),
           form: {
+              name: "",
               email: "",
               password: ""
           },
+          awaiting: false,
           rules: {
-              email:    [{ validator: checkEmail, trigger: 'blur'}],
-              password: [{ validator: checkPassword, trigger: 'blur'}]
+              name: [{ validator: checkName, trigger: 'blur' }],
+              email: [{ validator: checkEmail, trigger: 'blur' }],
+              password: [{ validator: checkPassword, trigger: 'blur' }]
           }
       };
   },
@@ -63,20 +72,21 @@ export default {
     submitForm(formName) {
       this.$refs[formName].validate(async (valid) => {
         if (valid) {
-          const data = await this.$store.dispatch("login", this.form);
-          this.proceedAfterLogin();
-          // TODO: submit auth request to the Membership service
-          alert('submitted');
+            this.awaiting = true;
+            const data = await this.loginApi.createNewUser(this.form.name, this.form.email, this.form.password);
+            if (data) {
+                console.log(data);
+                this.$message.success('Successfully registered!');
+                this.awaiting = false;
+                setTimeout(function () { this.$router.replace("/signin"); }, 1500);
+                return true;
+            }
+            return false;
         } else {
-          console.log("failed to submit.");
-          return false;
+            console.log("failed to submit.");
+            return false;
         }
       });
-    },
-    proceedAfterLogin() {
-      if (this.$store.user.loggedIn) {
-        this.$router.push("Home");
-      }
     }
   }
 }
@@ -108,9 +118,4 @@ h1 {
     font-size: 25px;
     line-height: 30px;
 }
-
-/* .back-icon {
-    text-align: left !important;
-    align-self: left;
-} */
 </style>

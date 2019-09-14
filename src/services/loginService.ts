@@ -8,8 +8,8 @@ export class LoginService {
     this.api = new ApiService(token, process.env.VUE_APP_LOGIN_SERVICE);
   }
 
-  async createNewUser(username: string, password: string) {
-    const data = await this.api.postRequest("/auth/new", {"login": username, "password": password});
+  async createNewUser(name: string, email: string, password: string) {
+    const data = await this.api.postRequest("/auth/new", { "email": email, "password": password, "name": name });
     if (data) {
       return data
     }
@@ -18,8 +18,8 @@ export class LoginService {
     }
   }
 
-  async login(username: string, password: string) {
-    const data = await this.api.postRequest("/auth/login", {"login": username, "password": password});
+  async login(email: string, password: string) {
+    const data = await this.api.postRequest("/auth/login", { "email": email, "password": password });
     if (data) {
       return data
     }
@@ -28,8 +28,8 @@ export class LoginService {
     }
   }
 
-  async refreshToken(accessToken: string, refreshToken: string) {
-    const data = await this.api.postRequest("/auth/new", {"access token": accessToken, "refresh token": refreshToken});
+  async refreshToken(refreshToken: string) {
+    const data = await this.api.postRequest("/auth/refreshToken", { "refresh_token": refreshToken});
     if (data) {
       return data
     }

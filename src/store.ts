@@ -160,11 +160,11 @@ export default new Vuex.Store({
 
     async login({ commit }, params) {
       commit('SET_LOADING_ITEMS', true);
-      const data = await loginApi.login(params.username, params.password);
+      const data = await loginApi.login(params.email, params.password);
       if (data) {
         const tokens = {
-          accessToken: data["access token"],
-          refreshToken: data["refresh token"]
+          accessToken: data["access_token"],
+          refreshToken: data["refresh_token"]
         }
         commit("SET_CREDENTIALS", tokens);
         commit('SET_LOADING_ITEMS', false);

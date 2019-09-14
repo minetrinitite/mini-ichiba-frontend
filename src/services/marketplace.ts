@@ -32,7 +32,8 @@ export class MarketplaceService {
   async postOrder(order: object) {
     const response = await this.api.API.post('/orders/create', order);
     if (response) {
-      return response.status;
+      //return response.status;
+      return response;
     }
   }
 }

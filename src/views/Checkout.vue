@@ -1,10 +1,10 @@
 <template>
     <el-container>
         <el-main v-loading="awaiting">
-            <div class="container">
+            <el-card class="box">
                 <h1>Checkout</h1>
                 <div class="total-price">Total: ¥{{ getCartTotal }}</div>
-                <div class="granted-points">You will receive {{ getCartPoints }} pts after this purchase.</div>
+                <div class="granted-points">You will receive {{ getCartPoints }} MiniIchiba points after this purchase.</div>
                 <el-form ref="form" :model="form">
                     <el-form-item label="Your name">
                         <el-input v-model="form.customerName" placeholder="Name"/>
@@ -22,10 +22,14 @@
                         <p v-if="getCartPoints > 0">However, you will receive them after this purchase, so that any future purchase is cheaper.</p>
                     </el-form-item>
                     <el-form-item>
+                        <h2>Payment method</h2>
+                        <el-radio v-model="paymentMethod" :label="paypal">PayPal</el-radio>
+                    </el-form-item>
+                    <el-form-item>
                         <el-button type="primary" @click="submit">Continue</el-button>
                     </el-form-item>
                 </el-form>
-            </div>
+            </el-card>
         </el-main>
   </el-container>
 </template>
@@ -40,6 +44,7 @@ export default {
                 customerAddress: "",
                 usedPoints: 0
             },
+            paymentMethod: "paypal",
             awaiting: false
         }
     },
@@ -53,33 +58,35 @@ export default {
     },
     methods: {
         submit () {
+            // First we post an Order to our backend service
             // TODO: link with Membership service
-            var request = {
+            var orderRequest = {
                 customerName: this.form.customerName,
                 customerAddress: this.form.customerAddress,
                 customerId: "45745c60-7b1a-11e8-9c9c-2d42b21b1a3e",
+                usedPoints: this.form.usedPoints,
                 entries: this.getCartItems
             }
 
             this.awaiting = true;
-            var result = this.$store.dispatch("sendOrder", request);
-            result.then(value => {
-                console.log(value);
-                if (value == 200) {
-                    this.$store.dispatch("clearCart");
-                    this.$message({
-                        message: 'Successfully sent the order! Redirecting back to the shop...',
-                        type: 'success'
-                    });
-                    setTimeout(() => {
-                        this.$router.push("/");
-                    }, 2500);
+            var result = this.$store.dispatch("sendOrder", orderRequest);
+            result.then(response => {
+                console.log(response.status);
+                console.log(response.data);
+                console.log(response);
+
+                // If everything is OK, the backend service should've provided a URI to redirect to
+                if (response.status == 200) {
+                    // The payment service will not respond with redirection URI if entire purchase was done with points
+                    if (response.data.redirectURI)
+                        this.$router.replace(response.data.redirectURI);
+                    else
+                        this.$router.replace("/");
                 } else {
                     this.$message.error('Failed to send order.');
                     this.awaiting = false;
                 }
             });
-            
         }
     }
 }

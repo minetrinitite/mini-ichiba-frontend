@@ -49,24 +49,21 @@ export default {
         }
     },
     computed: {
-        ...mapGetters(['getCartTotal', 'getCartPoints', 'getCartItems']),
-        ...mapState(['cart']),
-        getUserPoints () {
-            // TODO: add getter to vuex store && link it to Points service
-            return 42;
-        }
+        ...mapGetters(['getCartTotal', 'getCartPoints', 'getCartItems', 'getAccessToken', 'getUserPoints']),
+        ...mapState(['cart'])
     },
     methods: {
         submit () {
             // First we post an Order to our backend service
-            // TODO: link with Membership service
             var orderRequest = {
                 customerName: this.form.customerName,
                 customerAddress: this.form.customerAddress,
-                customerId: "45745c60-7b1a-11e8-9c9c-2d42b21b1a3e",
+                token: this.getAccessToken,
                 usedPoints: this.form.usedPoints,
                 entries: this.getCartItems
             }
+
+            console.log(this.getAccessToken);
 
             this.awaiting = true;
             var result = this.$store.dispatch("sendOrder", orderRequest);
@@ -79,14 +76,23 @@ export default {
                 if (response.status == 200) {
                     // The payment service will not respond with redirection URI if entire purchase was done with points
                     if (response.data.redirectURI)
-                        this.$router.replace(response.data.redirectURI);
+                        window.location.replace(response.data.redirectURI);
                     else
                         this.$router.replace("/");
                 } else {
                     this.$message.error('Failed to send order.');
-                    this.awaiting = false;
                 }
+            }).finally(() => {
+                this.awaiting = false;
             });
+        }
+    },
+    mounted () {
+        if (this.$store.state.user.loggedIn == false) {
+            console.log("not logged in");
+            this.$router.replace("/");
+        } else {
+            this.$store.dispatch("fetchPoints");
         }
     }
 }

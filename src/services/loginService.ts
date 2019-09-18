@@ -21,6 +21,7 @@ export class LoginService {
   async login(email: string, password: string) {
     const data = await this.api.postRequest("/auth/login", { "email": email, "password": password });
     if (data) {
+      console.log(data);
       return data
     }
     else {

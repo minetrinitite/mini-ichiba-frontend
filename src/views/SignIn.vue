@@ -65,8 +65,7 @@ export default {
         if (valid) {
           const data = await this.$store.dispatch("login", this.form);
           this.proceedAfterLogin();
-          // TODO: submit auth request to the Membership service
-          alert('submitted');
+          //alert('submitted');
         } else {
           console.log("failed to submit.");
           return false;
@@ -74,8 +73,8 @@ export default {
       });
     },
     proceedAfterLogin() {
-      if (this.$store.user.loggedIn) {
-        this.$router.push("Home");
+      if (this.$store.state.user.loggedIn) {
+        this.$router.push("/");
       }
     }
   }

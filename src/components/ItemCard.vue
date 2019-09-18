@@ -1,8 +1,8 @@
 <template>
     <el-card shadow="hover" class="item-card">
       <div class="image-block">
-        <router-link to="">
-          <el-image fit="cover" class="image-slot">
+        <router-link :to="'/item?id=' + item.id">
+          <el-image :src="item.imageURL" fit="cover" class="image-slot">
             <div slot="error" class="image-slot">
               <i class="el-icon-picture-outline"></i>
             </div>

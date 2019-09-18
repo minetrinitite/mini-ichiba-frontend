@@ -9,6 +9,7 @@ export class PointsService {
   }
 
   async getUserPoints() {
+    console.log("requesting points from " + process.env.VUE_APP_POINTS_SERVICE + "/points")
     const data = await this.api.getRequest("/points");
     if (data) {
       return data

@@ -41,7 +41,12 @@ export default Vue.extend({
     },
     mounted () {
         // TODO: swap for real user ID
-        this.$store.dispatch('loadOrders', "45745c60-7b1a-11e8-9c9c-2d42b21b1a3e");
+        if (this.$store.state.user.loggedIn == false) {
+            console.log("not logged in");
+            this.$router.replace("/signin");
+        } else {
+            this.$store.dispatch('loadOrders', this.$store.state.user.accessToken);
+        }
     }
 })
 </script>

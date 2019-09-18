@@ -23,6 +23,21 @@ export class ApiService {
       store.commit('SET_LOADING_ORDERS', false);
       console.log(error);
     });
+
+    this.API.interceptors.request.use(
+      config => {
+        if (!config.headers.Authorization) {
+          const token = store.state.user.accessToken;
+    
+          if (token) {
+            config.headers.Authorization = `Bearer ${token}`;
+            console.log("set access token to " + token);
+          }
+        }
+        return config;
+      },
+      error => Promise.reject(error)
+    );
   }
 
   async postRequest(path: string, body: Object, axiosConfig?: AxiosRequestConfig) {

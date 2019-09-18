@@ -21,9 +21,9 @@ export class MarketplaceService {
     }
   }
 
-  async getAllOrders(id: string) {
+  async getAllOrders(token: string) {
     // TODO: bet there is a better way to send request parameters
-    const response = await this.api.API.get('/orders/all?customerId=' + id);
+    const response = await this.api.API.get('/orders/all?token=' + token);
     if (response) {
       return response.data;
     }

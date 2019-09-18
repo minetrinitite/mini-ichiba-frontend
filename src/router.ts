@@ -1,7 +1,6 @@
 import Vue from 'vue'
 import Router from 'vue-router'
-import Home from './views/Home.vue'
-import DefaultView from "@/views/DefaultView.vue";
+import store from '@/store'
 
 Vue.use(Router)
 
@@ -29,6 +28,27 @@ export default new Router({
           component: () => import("./views/Checkout.vue"),
         },
         {
+          path: '/checkoutfailure',
+          name: 'Checkout Failure',
+          component: () => import("./views/CheckoutFailure.vue")
+        },
+        {
+          path: '/item',
+          name: 'Item',
+          component: () => import("./views/ItemDescription.vue"),
+          props: function (route) {
+            var founditem = store.state.items.find(function (entry) {
+              return entry.id === route.query.id;
+            });
+            return { item: founditem };
+          }
+        },
+        {
+          path: '/user',
+          name: 'UserInfo',
+          component: () => import("./views/UserInfo.vue"),
+        },
+        {
           path: '/orders',
           name: 'Orders',
           component: () => import("./views/Orders.vue"),
@@ -42,6 +62,11 @@ export default new Router({
           path: '/signup',
           name: 'Sign Up',
           component: () => import("./views/SignUp.vue"),
+        },
+        {
+          path: '/passwordrecovery',
+          name: 'Password Recovery',
+          component: () => import("./views/PasswordRecovery.vue")
         },
         {
           path: '/about',

@@ -7,12 +7,13 @@
       <el-col :xs="20" :sm="20">  
         <el-menu :default-active="activeIndex" :router="true" mode="horizontal" class="menu-flex" @select="handleSelect">
           <el-menu-item index="/">Home</el-menu-item>
-          <el-submenu index="/">
+          <!-- Not yet implemented properly -->
+          <!--<el-submenu index="/">
             <template slot="title">Categories</template>
             <el-menu-item v-for="category in item_categories" :key="category.id" :index="'2-' + category.id">
               {{ category.name }}
             </el-menu-item>
-          </el-submenu>
+          </el-submenu>-->
           <el-menu-item index="/cart">Cart <el-badge v-if="cartItems !== 0" class="cart-amount-block" :value="cartItems" /></el-menu-item>
           <el-menu-item index="/about">About</el-menu-item>
           <el-menu-item>
